@@ -13,10 +13,7 @@ final class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Shopping list"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptForItem))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearList))
+        addNavigationBar()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,14 +53,30 @@ final class TableViewController: UITableViewController {
         present(alertController, animated: true)
     }
     
-    @objc private func clearList() {
+    @objc private func clearBarButtonTapped() {
         shoppingList = []
         tableView.reloadData()
+    }
+
+    @objc private func shareBarButtonTapped() {
+        let activityViewController = UIActivityViewController(activityItems: [shoppingList.joined(separator: "\n")], applicationActivities: nil)
+        present(activityViewController, animated: true)
     }
     
     private func submit(_ item: String) {
         shoppingList.insert(item, at: 0)
         tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+    }
+    
+    private func addNavigationBar() {
+        title = "Shopping list"
+        navigationController?.navigationBar.prefersLargeTitles = true
+
+        let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptForItem))
+        let clearBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearBarButtonTapped))
+        let shareBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonTapped))
+        navigationItem.leftBarButtonItem = clearBarButtonItem
+        navigationItem.rightBarButtonItems = [shareBarButtonItem, addBarButtonItem]
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

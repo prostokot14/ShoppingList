@@ -16,6 +16,7 @@ final class TableViewController: UITableViewController {
         title = "Shopping list"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptForItem))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearList))
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -50,6 +51,11 @@ final class TableViewController: UITableViewController {
         
         alertController.addAction(submitAlertAction)
         present(alertController, animated: true)
+    }
+    
+    @objc private func clearList() {
+        shoppingList = []
+        tableView.reloadData()
     }
     
     private func submit(_ item: String) {

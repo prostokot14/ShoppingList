@@ -8,18 +8,21 @@
 import UIKit
 
 final class TableViewController: UITableViewController {
+    // MARK: - Private Properties
     private var shoppingList = [String]()
-    
+
+    // MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
 
         addNavigationBar()
     }
-    
+
+    // MARK: - UITableViewController
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         shoppingList.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Item", for: indexPath)
         
@@ -33,7 +36,15 @@ final class TableViewController: UITableViewController {
         
         return cell
     }
-    
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            shoppingList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+
+    // MARK: - Private Methods
     @objc private func promptForItem() {
         let alertController = UIAlertController(title: "Enter an item", message: nil, preferredStyle: .alert)
         alertController.addTextField()
@@ -77,12 +88,5 @@ final class TableViewController: UITableViewController {
         let shareBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonTapped))
         navigationItem.leftBarButtonItem = clearBarButtonItem
         navigationItem.rightBarButtonItems = [shareBarButtonItem, addBarButtonItem]
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            shoppingList.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
     }
 }

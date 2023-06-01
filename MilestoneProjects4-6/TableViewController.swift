@@ -48,8 +48,11 @@ final class TableViewController: UITableViewController {
             
             self?.submit(item)
         }
+
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         alertController.addAction(submitAlertAction)
+        alertController.addAction(cancelAlertAction)
         present(alertController, animated: true)
     }
     

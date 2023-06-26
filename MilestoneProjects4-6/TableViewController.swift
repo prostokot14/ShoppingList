@@ -18,32 +18,6 @@ final class TableViewController: UITableViewController {
         addNavigationBar()
     }
 
-    // MARK: - UITableViewController
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        shoppingList.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Item", for: indexPath)
-        
-        if #available(iOS 14.0, *) {
-            var content = cell.defaultContentConfiguration()
-            content.text = shoppingList[indexPath.row]
-            cell.contentConfiguration = content
-        } else {
-            cell.textLabel?.text = shoppingList[indexPath.row]
-        }
-        
-        return cell
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            shoppingList.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
-    }
-
     // MARK: - Private Methods
     @objc private func promptForItem() {
         let alertController = UIAlertController(title: "Enter an item", message: nil, preferredStyle: .alert)
@@ -88,5 +62,33 @@ final class TableViewController: UITableViewController {
         let shareBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonTapped))
         navigationItem.leftBarButtonItem = clearBarButtonItem
         navigationItem.rightBarButtonItems = [shareBarButtonItem, addBarButtonItem]
+    }
+}
+
+// MARK: - UITableViewController
+extension TableViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        shoppingList.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Item", for: indexPath)
+        
+        if #available(iOS 14.0, *) {
+            var content = cell.defaultContentConfiguration()
+            content.text = shoppingList[indexPath.row]
+            cell.contentConfiguration = content
+        } else {
+            cell.textLabel?.text = shoppingList[indexPath.row]
+        }
+        
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            shoppingList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
     }
 }
